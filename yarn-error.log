@@ -1,30 +1,25 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js install
+  C:\Program Files\nodejs\node.exe C:\Users\skaty\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js start
 
 PATH: 
-  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin\;C:\Users\skaty\AppData\Roaming\Python\Python38\Scripts;C:\Users\skaty\AppData\Roaming\Python\Python38;C:\WINDOWS\system32\config\systemprofile\AppData\roaming\Python\Python38\Scripts;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Amazon\AWSCLIV2\;C:\Program Files\nodejs\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\skaty\.cargo\bin;C:\Users\skaty\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\skaty\AppData\Local\Programs\Python\Python38-32\;C:\Users\skaty\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Bandizip\;C:\Users\skaty\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\skaty\AppData\Local\Yarn\bin;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\skaty\AppData\Roaming\npm;
+  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\skaty\.cargo\bin;C:\Users\skaty\AppData\Local\Microsoft\WindowsApps;C:\Users\skaty\AppData\Roaming\npm;C:\Users\skaty\AppData\Local\Programs\Microsoft VS Code\bin
 
 Yarn version: 
-  1.21.1
+  1.22.10
 
 Node version: 
-  14.15.4
+  14.17.0
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/wasm-game-of-life: Not found
-      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66056:18)
-      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140665:22)
-      at Request.emit (events.js:315:20)
-      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141637:10)
-      at Request.emit (events.js:315:20)
-      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141559:12)
-      at Object.onceWrapper (events.js:421:28)
-      at IncomingMessage.emit (events.js:327:22)
-      at endReadableNT (internal/streams/readable.js:1327:12)
-      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+  SyntaxError: C:\Projects\wasm-game-of-life\www\package.json: Unexpected token / in JSON at position 772
+      at JSON.parse (<anonymous>)
+      at C:\Users\skaty\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\skaty\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\skaty\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
 
 npm manifest: 
   {
@@ -56,14 +51,15 @@ npm manifest:
     },
     "homepage": "https://github.com/rustwasm/create-wasm-app#readme",
     "dependencies": {
-      "wasm-game-of-life": "@shubidumdu/wasm-game-of-life@^0.1.0"
+      // "wasm-game-of-life": "npm:@shubidumdu/wasm-game-of-life@^0.1.1"
+      "wasm-game-of-life": "file:../pkg"
     },
     "devDependencies": {
+      "copy-webpack-plugin": "^5.0.0",
       "hello-wasm-pack": "^0.1.0",
       "webpack": "^4.29.3",
       "webpack-cli": "^3.1.0",
-      "webpack-dev-server": "^3.1.5",
-      "copy-webpack-plugin": "^5.0.0"
+      "webpack-dev-server": "^3.1.5"
     }
   }
 
@@ -3777,9 +3773,10 @@ Lockfile:
     "resolved" "https://registry.npmjs.org/vm-browserify/-/vm-browserify-1.1.2.tgz"
     "version" "1.1.2"
   
-  "wasm-game-of-life@file:../pkg":
-    "resolved" "file:../pkg"
-    "version" "0.1.0"
+  "wasm-game-of-life@npm:@shubidumdu/wasm-game-of-life@^0.1.1":
+    "integrity" "sha512-2NUgKZ0LJG66wLLKov54fr+0bsLqvcFMVP2uZ5QQd4LI2EGLxwExCWjrt114UPpibXvsyMhZwMyBWdQSXi1PLA=="
+    "resolved" "https://registry.npmjs.org/@shubidumdu/wasm-game-of-life/-/wasm-game-of-life-0.1.1.tgz"
+    "version" "0.1.1"
   
   "watchpack@^1.6.1":
     "integrity" "sha512-+IF9hfUFOrYOOaKyfaI7h7dquUIOgyEMoQMLA7OP5FxegKA2+XdXThAZ9TU2kucfhDH7rfMHs1oPYziVGWRnZA=="
