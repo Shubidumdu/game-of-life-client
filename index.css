@@ -1,0 +1,16 @@
+html, 
+body {
+    height: 100%;
+}
+
+#fps {
+  white-space: pre;
+  font-family: monospace;
+}
+
+#game-of-life-canvas {
+  width: 100%;
+  height: 100%; /* Fallback for browsers that do not support Custom Properties */
+  /* height: calc(var(--vh, 1vh) * 100); */
+}
+
