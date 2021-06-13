@@ -18,30 +18,19 @@ function resizeRendererToDisplaySize(renderer) {
 const canvas = document.querySelector("#game-of-life-canvas");
 const renderer = new THREE.WebGLRenderer({ canvas });
 
-const fov = 75;
+const fov = 100;
 const aspect = 2;
 const near = 0.1;
-const far = 5;
+const far = 1000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-camera.position.z = 2;
+camera.position.setY(5);
+
 controls.update();
 
 const scene = new THREE.Scene();
-
-const boxWidth = 1;
-const boxHeight = 1;
-const boxDepth = 1;
-const geometry = new THREE.PlaneGeometry(boxWidth, boxHeight, boxDepth);
-const material = new THREE.MeshPhongMaterial({
-  color: 0xffffff,
-  side: THREE.DoubleSide,
-});
-const cube = new THREE.Mesh(geometry, material);
-
-scene.add(cube);
 
 renderer.render(scene, camera);
 
@@ -62,12 +51,17 @@ function render(time) {
 }
 requestAnimationFrame(render);
 
+const GRID_SIZE = 10;
+const GRID_DIVISIONS = 64;
+
+const gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_DIVISIONS);
+gridHelper.material.transparent = true;
+gridHelper.material.opacity = 0.8;
+
 {
   const color = 0xffffff;
   const intensity = 1;
   const light1 = new THREE.DirectionalLight(color, intensity);
-  const light2 = new THREE.DirectionalLight(color, intensity);
   light1.position.set(0, 0, 4);
-  light2.position.set(0, 0, -4);
-  scene.add(light1, light2);
+  scene.add(light1, gridHelper);
 }
