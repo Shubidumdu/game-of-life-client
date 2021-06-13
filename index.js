@@ -32,7 +32,7 @@ const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-camera.position.setY(64);
+camera.position.setY(48);
 
 controls.update();
 
@@ -53,8 +53,17 @@ const bitIsSet = (n, arr) => {
   return (arr[byte] & mask) === mask;
 };
 
-// const cube = new THREE.Mesh(geometry, material);
-// cube.position.set(0.5, 0, 0.5);
+const GRID_SIZE = 64;
+const GRID_DIVISIONS = 64;
+
+const gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_DIVISIONS);
+gridHelper.material.transparent = true;
+gridHelper.material.opacity = 0.5;
+
+const color = 0xffffff;
+const intensity = 0.8;
+const light1 = new THREE.DirectionalLight(color, intensity);
+light1.position.set(0, 2, 4);
 
 const drawCells = () => {
   const cellsPtr = universe.cells();
@@ -63,7 +72,7 @@ const drawCells = () => {
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
       const idx = getIndex(row, col);
-      if (bitIsSet(idx, cells)) continue;
+      if (!bitIsSet(idx, cells)) continue;
 
       const cube = new THREE.Mesh(geometry, material);
       cube.position.set(row - 32 + 0.5, 0, col - 32 + 0.5);
@@ -74,6 +83,10 @@ const drawCells = () => {
 
 function render(time) {
   time *= 0.001; // convert time to seconds
+  universe.tick();
+  scene.remove.apply(scene, scene.children);
+  scene.add(light1, gridHelper);
+  drawCells();
 
   if (resizeRendererToDisplaySize(renderer)) {
     const canvas = renderer.domElement;
@@ -88,18 +101,6 @@ function render(time) {
 
 requestAnimationFrame(render);
 
-const GRID_SIZE = 64;
-const GRID_DIVISIONS = 64;
+drawCells();
 
-const gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_DIVISIONS);
-gridHelper.material.transparent = true;
-gridHelper.material.opacity = 0.8;
-
-{
-  drawCells();
-  const color = 0xffffff;
-  const intensity = 1;
-  const light1 = new THREE.DirectionalLight(color, intensity);
-  light1.position.set(0, 2, 4);
-  scene.add(light1, gridHelper);
-}
+console.log(scene);
