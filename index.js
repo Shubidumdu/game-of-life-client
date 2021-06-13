@@ -18,15 +18,15 @@ function resizeRendererToDisplaySize(renderer) {
 const canvas = document.querySelector("#game-of-life-canvas");
 const renderer = new THREE.WebGLRenderer({ canvas });
 
-const fov = 100;
+const fov = 75;
 const aspect = 2;
 const near = 0.1;
-const far = 1000;
+const far = 256;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-camera.position.setY(5);
+camera.position.setY(64);
 
 controls.update();
 
@@ -51,17 +51,22 @@ function render(time) {
 }
 requestAnimationFrame(render);
 
-const GRID_SIZE = 10;
+const GRID_SIZE = 64;
 const GRID_DIVISIONS = 64;
 
 const gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_DIVISIONS);
 gridHelper.material.transparent = true;
 gridHelper.material.opacity = 0.8;
 
+const geometry = new THREE.BoxGeometry(1, 0, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 });
+const cube = new THREE.Mesh(geometry, material);
+cube.position.set(0.5, 0, -0.5);
+
 {
   const color = 0xffffff;
   const intensity = 1;
   const light1 = new THREE.DirectionalLight(color, intensity);
-  light1.position.set(0, 0, 4);
-  scene.add(light1, gridHelper);
+  light1.position.set(0, 2, 4);
+  scene.add(light1, gridHelper, cube);
 }
