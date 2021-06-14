@@ -40,8 +40,8 @@ const scene = new THREE.Scene();
 
 renderer.render(scene, camera);
 
-const geometry = new THREE.BoxGeometry(1, 0, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 });
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
 
 const getIndex = (row, column) => {
   return row * width + column;
@@ -61,11 +61,11 @@ gridHelper.material.transparent = true;
 gridHelper.material.opacity = 0.5;
 
 const color = 0xffffff;
-const intensity = 0.8;
+const intensity = 1;
 const light1 = new THREE.DirectionalLight(color, intensity);
 light1.position.set(0, 2, 4);
 
-const drawCells = () => {
+const drawCells = (time) => {
   const cellsPtr = universe.cells();
   const cells = new Uint8Array(memory.buffer, cellsPtr, (width * height) / 8);
 
@@ -73,9 +73,9 @@ const drawCells = () => {
     for (let col = 0; col < width; col++) {
       const idx = getIndex(row, col);
       if (!bitIsSet(idx, cells)) continue;
-
       const cube = new THREE.Mesh(geometry, material);
-      cube.position.set(row - 32 + 0.5, 0, col - 32 + 0.5);
+      cube.position.set(row - 32 + 0.5, 0.5, col - 32 + 0.5);
+      cube.startAt = time;
       scene.add(cube);
     }
   }
@@ -83,10 +83,16 @@ const drawCells = () => {
 
 function render(time) {
   time *= 0.001; // convert time to seconds
-  universe.tick();
-  scene.remove.apply(scene, scene.children);
+  // universe.tick();
+  scene.children.forEach((child) => {
+    if (child.type === "Mesh" && time - child.startAt < 1) {
+      child.scale.setY(Math.sin(time * 10));
+      child.position.setY(Math.abs(Math.sin(time * 1) / 2));
+    }
+  });
+  // scene.remove.apply(scene, scene.children);
   scene.add(light1, gridHelper);
-  drawCells();
+  // drawCells();
 
   if (resizeRendererToDisplaySize(renderer)) {
     const canvas = renderer.domElement;
@@ -101,6 +107,6 @@ function render(time) {
 
 requestAnimationFrame(render);
 
-drawCells();
+drawCells(0);
 
 console.log(scene);
