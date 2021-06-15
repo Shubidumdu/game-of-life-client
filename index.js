@@ -83,16 +83,20 @@ const drawCells = (time) => {
 
 function render(time) {
   time *= 0.001; // convert time to seconds
-  // universe.tick();
+  universe.tick();
   scene.children.forEach((child) => {
-    if (child.type === "Mesh" && time - child.startAt < 1) {
-      child.scale.setY(Math.sin(time * 10));
-      child.position.setY(Math.abs(Math.sin(time * 1) / 2));
+    if (child.type === "Mesh") {
+      if (time - child.startAt < 1) {
+        child.scale.setY(Math.sin(time - child.startAt));
+        // child.position.setY(Math.abs(Math.sin(time)) / 2);
+      } else {
+        scene.remove(child);
+      }
     }
   });
   // scene.remove.apply(scene, scene.children);
   scene.add(light1, gridHelper);
-  // drawCells();
+  drawCells(time);
 
   if (resizeRendererToDisplaySize(renderer)) {
     const canvas = renderer.domElement;
