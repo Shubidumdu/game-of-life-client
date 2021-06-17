@@ -87,8 +87,8 @@ function render(time) {
   scene.children.forEach((child) => {
     if (child.type === "Mesh") {
       if (time - child.startAt < 1) {
-        child.scale.setY(Math.sin(time - child.startAt));
-        child.position.setY(Math.abs(Math.sin(time)) / 2);
+        child.scale.setY(Math.sin((time - child.startAt) * Math.PI));
+        child.position.setY(Math.sin((time - child.startAt) * Math.PI) / 2);
       } else {
         scene.remove(child);
       }
