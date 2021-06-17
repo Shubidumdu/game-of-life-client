@@ -1,9 +1,9 @@
-import { Universe } from "wasm-game-of-life";
-import { memory } from "wasm-game-of-life/wasm_game_of_life_bg";
-import * as THREE from "three";
-import "normalize.css";
-import "./index.css";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { Universe } from 'wasm-game-of-life';
+import { memory } from 'wasm-game-of-life/wasm_game_of_life_bg';
+import * as THREE from 'three';
+import 'normalize.css';
+import './index.css';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const universe = Universe.new();
 const width = universe.width();
@@ -21,7 +21,7 @@ function resizeRendererToDisplaySize(renderer) {
   return needResize;
 }
 
-const canvas = document.querySelector("#game-of-life-canvas");
+const canvas = document.querySelector('#game-of-life-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas });
 
 const fov = 75;
@@ -41,7 +41,8 @@ const scene = new THREE.Scene();
 renderer.render(scene, camera);
 
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
+const activeMaterial = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
+const inactiveMaterial = new THREE.MeshPhysicalMaterial({ color: 0x444444 });
 
 const getIndex = (row, column) => {
   return row * width + column;
@@ -73,7 +74,7 @@ const drawCells = (time) => {
     for (let col = 0; col < width; col++) {
       const idx = getIndex(row, col);
       if (!bitIsSet(idx, cells)) continue;
-      const cube = new THREE.Mesh(geometry, material);
+      const cube = new THREE.Mesh(geometry, activeMaterial);
       cube.position.set(row - 32 + 0.5, 0.5, col - 32 + 0.5);
       cube.startAt = time;
       scene.add(cube);
@@ -82,11 +83,12 @@ const drawCells = (time) => {
 };
 
 function render(time) {
-  time *= 0.001; // convert time to seconds
+  time *= 0.005; // convert time to seconds
   universe.tick();
   scene.children.forEach((child) => {
-    if (child.type === "Mesh") {
+    if (child.type === 'Mesh') {
       if (time - child.startAt < 1) {
+        child.material = inactiveMaterial;
         child.scale.setY(Math.sin((time - child.startAt) * Math.PI));
         child.position.setY(Math.sin((time - child.startAt) * Math.PI) / 2);
       } else {
