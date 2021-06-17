@@ -26,3 +26,7 @@ input[type='color'] {
 #inactive-color {
   top: 3rem;
 }
+
+#background-color {
+  top: 5rem;
+}

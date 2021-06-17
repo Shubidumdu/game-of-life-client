@@ -5,8 +5,12 @@ import 'normalize.css';
 import './index.css';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+const hexStringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
+
 const INITIAL_ACTIVE_COLOR = '#FFFFFF';
 const INITIAL_INACTIVE_COLOR = '#000000';
+const INITIAL_BACKGROUND_COLOR = '#000000';
+const INITIAL_GRID_COLOR = '';
 
 const universe = Universe.new();
 const width = universe.width();
@@ -15,6 +19,8 @@ const activeColor = document.querySelector('#active-color');
 activeColor.value = INITIAL_ACTIVE_COLOR;
 const inactiveColor = document.querySelector('#inactive-color');
 inactiveColor.value = INITIAL_INACTIVE_COLOR;
+const backgroundColor = document.querySelector('#background-color');
+backgroundColor.value = INITIAL_BACKGROUND_COLOR;
 
 function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;
@@ -44,6 +50,7 @@ camera.position.setY(48);
 controls.update();
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
 
 renderer.render(scene, camera);
 
@@ -52,13 +59,18 @@ const activeMaterial = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
 const inactiveMaterial = new THREE.MeshPhysicalMaterial({ color: 0x444444 });
 
 activeColor.addEventListener('change', (e) => {
-  const hex = parseInt(e.target.value.replace(/^#/, ''), 16);
+  const hex = hexStringToHex(e.target.value);
   activeMaterial.color.setHex(hex);
 });
 
 inactiveColor.addEventListener('change', (e) => {
-  const hex = parseInt(e.target.value.replace(/^#/, ''), 16);
+  const hex = hexStringToHex(e.target.value);
   inactiveMaterial.color.setHex(hex);
+});
+
+backgroundColor.addEventListener('change', (e) => {
+  const hex = hexStringToHex(e.target.value);
+  scene.background = new THREE.Color(hex);
 });
 
 const getIndex = (row, column) => {
@@ -75,8 +87,6 @@ const GRID_SIZE = 64;
 const GRID_DIVISIONS = 64;
 
 const gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_DIVISIONS);
-gridHelper.material.transparent = true;
-gridHelper.material.opacity = 0.5;
 
 const color = 0xffffff;
 const intensity = 1;
