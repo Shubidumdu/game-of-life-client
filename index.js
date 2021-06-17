@@ -5,9 +5,16 @@ import 'normalize.css';
 import './index.css';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+const INITIAL_ACTIVE_COLOR = '#FFFFFF';
+const INITIAL_INACTIVE_COLOR = '#000000';
+
 const universe = Universe.new();
 const width = universe.width();
 const height = universe.height();
+const activeColor = document.querySelector('#active-color');
+activeColor.value = INITIAL_ACTIVE_COLOR;
+const inactiveColor = document.querySelector('#inactive-color');
+inactiveColor.value = INITIAL_INACTIVE_COLOR;
 
 function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;
@@ -43,6 +50,16 @@ renderer.render(scene, camera);
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const activeMaterial = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
 const inactiveMaterial = new THREE.MeshPhysicalMaterial({ color: 0x444444 });
+
+activeColor.addEventListener('change', (e) => {
+  const hex = parseInt(e.target.value.replace(/^#/, ''), 16);
+  activeMaterial.color.setHex(hex);
+});
+
+inactiveColor.addEventListener('change', (e) => {
+  const hex = parseInt(e.target.value.replace(/^#/, ''), 16);
+  inactiveMaterial.color.setHex(hex);
+});
 
 const getIndex = (row, column) => {
   return row * width + column;

@@ -1,6 +1,6 @@
-html, 
+html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 #fps {
@@ -14,3 +14,15 @@ body {
   /* height: calc(var(--vh, 1vh) * 100); */
 }
 
+input[type='color'] {
+  position: absolute;
+  right: 1rem;
+}
+
+#active-color {
+  top: 1rem;
+}
+
+#inactive-color {
+  top: 3rem;
+}
