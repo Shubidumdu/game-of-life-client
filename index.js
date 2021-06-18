@@ -7,6 +7,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const hexStringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
 
+let isStop = false;
+
 const INITIAL_ACTIVE_COLOR = '#FFFFFF';
 const INITIAL_INACTIVE_COLOR = '#000000';
 const INITIAL_BACKGROUND_COLOR = '#000000';
@@ -161,13 +163,32 @@ function render(time) {
   animationId = requestAnimationFrame(render);
 }
 
+function renderWithStop(time) {
+  if (resizeRendererToDisplaySize(renderer)) {
+    const canvas = renderer.domElement;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+
+  controls.update();
+  renderer.render(scene, camera);
+  animationId = requestAnimationFrame(renderWithStop);
+}
+
 drawCells(0);
 
 animationId = requestAnimationFrame(render);
 
 stopBtn.addEventListener('click', (e) => {
-  console.log(animationId);
-  cancelAnimationFrame(animationId);
+  if (isStop) {
+    isStop = false;
+    cancelAnimationFrame(animationId);
+    animationId = requestAnimationFrame(render);
+  } else {
+    isStop = true;
+    cancelAnimationFrame(animationId);
+    animationId = requestAnimationFrame(renderWithStop);
+  }
 });
 
 console.log(scene);
