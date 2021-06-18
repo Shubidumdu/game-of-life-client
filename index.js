@@ -23,6 +23,7 @@ const backgroundColor = document.querySelector('#background-color');
 backgroundColor.value = INITIAL_BACKGROUND_COLOR;
 const gridColor = document.querySelector('#grid-color');
 gridColor.value = INITIAL_GRID_COLOR;
+const stopBtn = document.querySelector('#stop-button');
 
 function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;
@@ -48,6 +49,7 @@ const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 const controls = new OrbitControls(camera, renderer.domElement);
 
 camera.position.setY(48);
+camera.position.setZ(36);
 
 controls.update();
 
@@ -128,6 +130,8 @@ const drawCells = (time) => {
   }
 };
 
+let animationId = null;
+
 function render(time) {
   time *= 0.005; // convert time to seconds
   universe.tick();
@@ -154,11 +158,16 @@ function render(time) {
 
   controls.update();
   renderer.render(scene, camera);
-  requestAnimationFrame(render);
+  animationId = requestAnimationFrame(render);
 }
 
-requestAnimationFrame(render);
-
 drawCells(0);
+
+animationId = requestAnimationFrame(render);
+
+stopBtn.addEventListener('click', (e) => {
+  console.log(animationId);
+  cancelAnimationFrame(animationId);
+});
 
 console.log(scene);

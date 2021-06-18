@@ -34,3 +34,11 @@ input[type='color'] {
 #grid-color {
   top: 7rem;
 }
+
+#stop-button {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  color: red;
+  transform: translateX(-50%);
+}
