@@ -10,7 +10,7 @@ const hexStringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
 const INITIAL_ACTIVE_COLOR = '#FFFFFF';
 const INITIAL_INACTIVE_COLOR = '#000000';
 const INITIAL_BACKGROUND_COLOR = '#000000';
-const INITIAL_GRID_COLOR = '';
+const INITIAL_GRID_COLOR = '#888888';
 
 const universe = Universe.new();
 const width = universe.width();
@@ -21,6 +21,8 @@ const inactiveColor = document.querySelector('#inactive-color');
 inactiveColor.value = INITIAL_INACTIVE_COLOR;
 const backgroundColor = document.querySelector('#background-color');
 backgroundColor.value = INITIAL_BACKGROUND_COLOR;
+const gridColor = document.querySelector('#grid-color');
+gridColor.value = INITIAL_GRID_COLOR;
 
 function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;
@@ -86,7 +88,24 @@ const bitIsSet = (n, arr) => {
 const GRID_SIZE = 64;
 const GRID_DIVISIONS = 64;
 
-const gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_DIVISIONS);
+const gridHelper = new THREE.GridHelper(
+  GRID_SIZE,
+  GRID_DIVISIONS,
+  INITIAL_GRID_COLOR,
+  INITIAL_GRID_COLOR,
+);
+
+gridColor.addEventListener('change', (e) => {
+  const hex = hexStringToHex(e.target.value);
+  gridHelper.remove();
+  const newGridHelper = new THREE.GridHelper(
+    GRID_SIZE,
+    GRID_DIVISIONS,
+    hex,
+    hex,
+  );
+  scene.add(newGridHelper);
+});
 
 const color = 0xffffff;
 const intensity = 1;
