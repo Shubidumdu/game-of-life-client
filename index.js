@@ -124,9 +124,15 @@ const drawCells = (time) => {
     for (let col = 0; col < width; col++) {
       const idx = getIndex(row, col);
       if (!bitIsSet(idx, cells)) continue;
+      const exist = scene.children.find(
+        (child) => child.col === col && child.row === row,
+      );
+      if (exist) scene.remove(exist);
       const cube = new THREE.Mesh(geometry, activeMaterial);
       cube.position.set(row - 32 + 0.5, 0.5, col - 32 + 0.5);
       cube.startAt = time;
+      cube.row = row;
+      cube.col = col;
       scene.add(cube);
     }
   }
