@@ -35,10 +35,9 @@ input[type='color'] {
   top: 7rem;
 }
 
-#stop-button {
+#vertical-button-wrap {
   position: absolute;
   left: 50%;
   bottom: 1rem;
-  color: red;
   transform: translateX(-50%);
 }

@@ -26,6 +26,7 @@ backgroundColor.value = INITIAL_BACKGROUND_COLOR;
 const gridColor = document.querySelector('#grid-color');
 gridColor.value = INITIAL_GRID_COLOR;
 const stopBtn = document.querySelector('#stop-button');
+const resetBtn = document.querySelector('#reset-button');
 
 function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;
@@ -188,13 +189,19 @@ animationId = requestAnimationFrame(render);
 stopBtn.addEventListener('click', (e) => {
   if (isStop) {
     isStop = false;
+    e.target.textContent = 'STOP';
     cancelAnimationFrame(animationId);
     animationId = requestAnimationFrame(render);
   } else {
     isStop = true;
+    e.target.textContent = 'START';
     cancelAnimationFrame(animationId);
     animationId = requestAnimationFrame(renderWithStop);
   }
+});
+
+resetBtn.addEventListener('click', (e) => {
+  universe.set_height(64);
 });
 
 console.log(scene);
