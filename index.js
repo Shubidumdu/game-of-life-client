@@ -14,7 +14,7 @@ const INITIAL_INACTIVE_COLOR = '#000000';
 const INITIAL_BACKGROUND_COLOR = '#000000';
 const INITIAL_GRID_COLOR = '#888888';
 
-const universe = Universe.new();
+let universe = Universe.new();
 const width = universe.width();
 const height = universe.height();
 const activeColor = document.querySelector('#active-color');
@@ -27,6 +27,7 @@ const gridColor = document.querySelector('#grid-color');
 gridColor.value = INITIAL_GRID_COLOR;
 const stopBtn = document.querySelector('#stop-button');
 const resetBtn = document.querySelector('#reset-button');
+const randomBtn = document.querySelector('#random-button');
 
 function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;
@@ -202,6 +203,18 @@ stopBtn.addEventListener('click', (e) => {
 
 resetBtn.addEventListener('click', (e) => {
   universe.set_height(64);
+  scene.clear();
+  scene.add(light1, gridHelper);
+  renderer.render(scene, camera);
+});
+
+randomBtn.addEventListener('click', (e) => {
+  universe.set_height(64);
+  scene.clear();
+  scene.add(light1, gridHelper);
+  renderer.render(scene, camera);
+  universe.random();
+  drawCells(0);
 });
 
 console.log(scene);
