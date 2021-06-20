@@ -15,8 +15,8 @@ const INITIAL_BACKGROUND_COLOR = '#000000';
 const INITIAL_GRID_COLOR = '#888888';
 
 let universe = Universe.new();
-const width = universe.width();
-const height = universe.height();
+let width = universe.width();
+let height = universe.height();
 const activeColor = document.querySelector('#active-color');
 activeColor.value = INITIAL_ACTIVE_COLOR;
 const inactiveColor = document.querySelector('#inactive-color');
@@ -27,6 +27,7 @@ const gridColor = document.querySelector('#grid-color');
 gridColor.value = INITIAL_GRID_COLOR;
 const stopBtn = document.querySelector('#stop-button');
 const resetBtn = document.querySelector('#reset-button');
+const resizeBtn = document.querySelector('#resize-button');
 const randomBtn = document.querySelector('#random-button');
 
 function resizeRendererToDisplaySize(renderer) {
@@ -94,7 +95,7 @@ const bitIsSet = (n, arr) => {
 const GRID_SIZE = 64;
 const GRID_DIVISIONS = 64;
 
-const gridHelper = new THREE.GridHelper(
+let gridHelper = new THREE.GridHelper(
   GRID_SIZE,
   GRID_DIVISIONS,
   INITIAL_GRID_COLOR,
@@ -104,13 +105,8 @@ const gridHelper = new THREE.GridHelper(
 gridColor.addEventListener('change', (e) => {
   const hex = hexStringToHex(e.target.value);
   gridHelper.remove();
-  const newGridHelper = new THREE.GridHelper(
-    GRID_SIZE,
-    GRID_DIVISIONS,
-    hex,
-    hex,
-  );
-  scene.add(newGridHelper);
+  gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_DIVISIONS, hex, hex);
+  scene.add(gridHelper);
 });
 
 const color = 0xffffff;
@@ -131,7 +127,7 @@ const drawCells = (time) => {
       );
       if (exist) scene.remove(exist);
       const cube = new THREE.Mesh(geometry, activeMaterial);
-      cube.position.set(row - 32 + 0.5, 0.5, col - 32 + 0.5);
+      cube.position.set(row - width / 2 + 0.5, 0.5, col - height / 2 + 0.5);
       cube.startAt = time;
       cube.row = row;
       cube.col = col;
@@ -202,14 +198,42 @@ stopBtn.addEventListener('click', (e) => {
 });
 
 resetBtn.addEventListener('click', (e) => {
-  universe.set_height(64);
+  universe.reset();
   scene.clear();
   scene.add(light1, gridHelper);
   renderer.render(scene, camera);
 });
 
+resizeBtn.addEventListener('click', (e) => {
+  const size = window.prompt('size? (n >= 3)', width);
+  if (!size) return;
+  if (isNaN(size)) {
+    window.alert('Input value is not a number.');
+    return;
+  }
+  if (size < 3) {
+    window.alert('It cannot be smaller than 3.');
+    return;
+  }
+  try {
+    universe.resize(size || 64);
+    width = size;
+    height = size;
+    gridHelper = new THREE.GridHelper(
+      size,
+      size,
+      gridColor.value,
+      gridColor.value,
+    );
+    scene.clear();
+    scene.add(light1, gridHelper);
+    renderer.render(scene, camera);
+    drawCells(0);
+  } catch (err) {}
+});
+
 randomBtn.addEventListener('click', (e) => {
-  universe.set_height(64);
+  universe.set_height(width);
   scene.clear();
   scene.add(light1, gridHelper);
   renderer.render(scene, camera);
