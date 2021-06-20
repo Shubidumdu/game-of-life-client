@@ -66,10 +66,16 @@ renderer.render(scene, camera);
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const activeMaterial = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
 const inactiveMaterial = new THREE.MeshPhysicalMaterial({ color: 0x444444 });
+const cursorMaterial = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,
+  opacity: 0.8,
+  transparent: true,
+});
 
 activeColor.addEventListener('change', (e) => {
   const hex = hexStringToHex(e.target.value);
   activeMaterial.color.setHex(hex);
+  cursorMaterial.color.setHex(hex);
 });
 
 inactiveColor.addEventListener('change', (e) => {
@@ -242,3 +248,57 @@ randomBtn.addEventListener('click', (e) => {
 });
 
 console.log(scene);
+
+const raycaster = new THREE.Raycaster();
+
+const pointer = new THREE.Vector2();
+
+const onMouseMove = (e) => {
+  scene.children.forEach((child) => {
+    if (child.type === 'cursor') scene.remove(child);
+  });
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObject(gridHelper);
+  if (intersects.length > 0) {
+    const posX = intersects[0].point.x;
+    const posZ = intersects[0].point.z;
+    const row =
+      parseInt(posX + width / 2) >= width
+        ? width - 1
+        : parseInt(posX + width / 2);
+    const col =
+      parseInt(posZ + height / 2) >= height
+        ? height - 1
+        : parseInt(posZ + height / 2);
+    const cube = new THREE.Mesh(geometry, cursorMaterial);
+    cube.position.set(row - width / 2 + 0.5, 0.5, col - height / 2 + 0.5);
+    cube.type = 'cursor';
+    scene.add(cube);
+  }
+};
+
+const onMouseClick = (e) => {
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObject(gridHelper);
+  if (intersects.length > 0) {
+    const posX = intersects[0].point.x;
+    const posZ = intersects[0].point.z;
+    const row =
+      parseInt(posX + width / 2) >= width
+        ? width - 1
+        : parseInt(posX + width / 2);
+    const col =
+      parseInt(posZ + height / 2) >= height
+        ? height - 1
+        : parseInt(posZ + height / 2);
+    universe.toggle_cell(row, col);
+    drawCells(0);
+  }
+};
+
+document.addEventListener('mousemove', onMouseMove);
+document.addEventListener('pointerdown', onMouseClick);
