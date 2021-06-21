@@ -4047,10 +4047,8 @@ vm-browserify@^1.0.1:
   resolved "https://registry.npmjs.org/vm-browserify/-/vm-browserify-1.1.2.tgz"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-"wasm-game-of-life@npm:@shubidumdu/wasm-game-of-life@^0.1.1":
+"wasm-game-of-life@file:../pkg":
   version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@shubidumdu/wasm-game-of-life/-/wasm-game-of-life-0.1.1.tgz#4174e05aa6e063653b1c07d979665dad3326fd45"
-  integrity sha512-2NUgKZ0LJG66wLLKov54fr+0bsLqvcFMVP2uZ5QQd4LI2EGLxwExCWjrt114UPpibXvsyMhZwMyBWdQSXi1PLA==
 
 watchpack@^1.6.1:
   version "1.6.1"

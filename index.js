@@ -68,7 +68,7 @@ const activeMaterial = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
 const inactiveMaterial = new THREE.MeshPhysicalMaterial({ color: 0x444444 });
 const cursorMaterial = new THREE.MeshPhysicalMaterial({
   color: 0xffffff,
-  opacity: 0.8,
+  opacity: 0.6,
   transparent: true,
 });
 
@@ -279,6 +279,17 @@ const onMouseMove = (e) => {
   }
 };
 
+const makeThunk = (row, col) => {
+  return function setCellIfNoMovement(e) {
+    if (mouse.moveX < 5 && mouse.moveY < 5) {
+      universe.toggle_cell(row, col);
+      drawCells(0);
+    }
+    window.removeEventListener('pointermove', recordMovement);
+    window.removeEventListener('pointerup', setCellIfNoMovement);
+  };
+};
+
 const onMouseClick = (e) => {
   pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
   pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -295,10 +306,28 @@ const onMouseClick = (e) => {
       parseInt(posZ + height / 2) >= height
         ? height - 1
         : parseInt(posZ + height / 2);
-    universe.toggle_cell(row, col);
-    drawCells(0);
+    const setCellIfNoMovement = makeThunk(row, col);
+    recordStartPosition(e);
+    window.addEventListener('pointermove', recordMovement);
+    window.addEventListener('pointerup', setCellIfNoMovement);
   }
 };
 
-document.addEventListener('mousemove', onMouseMove);
-document.addEventListener('pointerdown', onMouseClick);
+const mouse = {
+  x: 0,
+  y: 0,
+};
+
+function recordStartPosition(event) {
+  mouse.x = event.clientX;
+  mouse.y = event.clientY;
+  mouse.moveX = 0;
+  mouse.moveY = 0;
+}
+function recordMovement(event) {
+  mouse.moveX += Math.abs(mouse.x - event.clientX);
+  mouse.moveY += Math.abs(mouse.y - event.clientY);
+}
+
+canvas.addEventListener('mousemove', onMouseMove);
+canvas.addEventListener('pointerdown', onMouseClick);
