@@ -9,10 +9,10 @@ const hexStringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
 
 let isStop = true;
 
-const INITIAL_ACTIVE_COLOR = '#FFFFFF';
-const INITIAL_INACTIVE_COLOR = '#000000';
-const INITIAL_BACKGROUND_COLOR = '#000000';
-const INITIAL_GRID_COLOR = '#888888';
+const INITIAL_ACTIVE_COLOR = '#D54B3F';
+const INITIAL_INACTIVE_COLOR = '#D2CFA6';
+const INITIAL_BACKGROUND_COLOR = '#1D383D';
+const INITIAL_GRID_COLOR = '#FDF8F5';
 
 let universe = Universe.new();
 let width = universe.width();
@@ -48,7 +48,7 @@ const renderer = new THREE.WebGLRenderer({ canvas });
 const fov = 75;
 const aspect = 2;
 const near = 0.1;
-const far = 256;
+const far = 1024;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -59,15 +59,19 @@ camera.position.setZ(36);
 controls.update();
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
+scene.background = new THREE.Color(hexStringToHex(INITIAL_BACKGROUND_COLOR));
 
 renderer.render(scene, camera);
 
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const activeMaterial = new THREE.MeshPhysicalMaterial({ color: 0xffffff });
-const inactiveMaterial = new THREE.MeshPhysicalMaterial({ color: 0x444444 });
+const activeMaterial = new THREE.MeshPhysicalMaterial({
+  color: hexStringToHex(INITIAL_ACTIVE_COLOR),
+});
+const inactiveMaterial = new THREE.MeshPhysicalMaterial({
+  color: hexStringToHex(INITIAL_INACTIVE_COLOR),
+});
 const cursorMaterial = new THREE.MeshPhysicalMaterial({
-  color: 0xffffff,
+  color: hexStringToHex(INITIAL_ACTIVE_COLOR),
   opacity: 0.6,
   transparent: true,
 });
@@ -115,10 +119,8 @@ gridColor.addEventListener('change', (e) => {
   scene.add(gridHelper);
 });
 
-const color = 0xffffff;
-const intensity = 1;
-const light1 = new THREE.DirectionalLight(color, intensity);
-light1.position.set(0, 2, 4);
+const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+light.position.set(0, 2, 0);
 
 const drawCells = (time) => {
   const cellsPtr = universe.cells();
@@ -184,7 +186,7 @@ function renderWithStop(time) {
   animationId = requestAnimationFrame(renderWithStop);
 }
 
-scene.add(light1, gridHelper);
+scene.add(light, gridHelper);
 animationId = requestAnimationFrame(renderWithStop);
 
 stopBtn.addEventListener('click', (e) => {
@@ -204,12 +206,12 @@ stopBtn.addEventListener('click', (e) => {
 resetBtn.addEventListener('click', (e) => {
   universe.reset();
   scene.clear();
-  scene.add(light1, gridHelper);
+  scene.add(light, gridHelper);
   renderer.render(scene, camera);
 });
 
 resizeBtn.addEventListener('click', (e) => {
-  const size = window.prompt('size? (n >= 3)', width);
+  const size = window.prompt('Please enter the size you want. (n >= 3)', width);
   if (!size) return;
   if (isNaN(size)) {
     window.alert('Input value is not a number.');
@@ -230,7 +232,7 @@ resizeBtn.addEventListener('click', (e) => {
       gridColor.value,
     );
     scene.clear();
-    scene.add(light1, gridHelper);
+    scene.add(light, gridHelper);
     renderer.render(scene, camera);
     drawCells(0);
   } catch (err) {}
@@ -239,7 +241,7 @@ resizeBtn.addEventListener('click', (e) => {
 randomBtn.addEventListener('click', (e) => {
   universe.set_height(width);
   scene.clear();
-  scene.add(light1, gridHelper);
+  scene.add(light, gridHelper);
   renderer.render(scene, camera);
   universe.random();
   drawCells(0);
