@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@shubidumdu/wasm-game-of-life@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@shubidumdu/wasm-game-of-life/-/wasm-game-of-life-0.1.2.tgz#01633291bd840463ee3400eec9e7989a18097f00"
+  integrity sha512-pBWaqgHKkgMvSUxon6gdrFh60u5uFPypRH+APaXF/baHoKjuyO7To6mqQdFz6/OxmX//lDAuzppA2FWI8Z5Vgg==
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.npmjs.org/@types/events/-/events-3.0.0.tgz"
@@ -4046,9 +4051,6 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.npmjs.org/vm-browserify/-/vm-browserify-1.1.2.tgz"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
-
-"wasm-game-of-life@file:../pkg":
-  version "0.1.1"
 
 watchpack@^1.6.1:
   version "1.6.1"

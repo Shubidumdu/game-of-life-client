@@ -1,5 +1,5 @@
-import { Universe } from 'wasm-game-of-life';
-import { memory } from 'wasm-game-of-life/wasm_game_of_life_bg';
+import { Universe } from '@shubidumdu/wasm-game-of-life';
+import { memory } from '@shubidumdu/wasm-game-of-life/wasm_game_of_life_bg';
 import * as THREE from 'three';
 import 'normalize.css';
 import './index.css';
@@ -7,7 +7,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const hexStringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
 
-let isStop = false;
+let isStop = true;
 
 const INITIAL_ACTIVE_COLOR = '#FFFFFF';
 const INITIAL_INACTIVE_COLOR = '#000000';
@@ -159,7 +159,6 @@ function render(time) {
     }
   });
   // scene.remove.apply(scene, scene.children);
-  scene.add(light1, gridHelper);
   drawCells(time);
 
   if (resizeRendererToDisplaySize(renderer)) {
@@ -185,9 +184,8 @@ function renderWithStop(time) {
   animationId = requestAnimationFrame(renderWithStop);
 }
 
-drawCells(0);
-
-animationId = requestAnimationFrame(render);
+scene.add(light1, gridHelper);
+animationId = requestAnimationFrame(renderWithStop);
 
 stopBtn.addEventListener('click', (e) => {
   if (isStop) {
@@ -247,8 +245,6 @@ randomBtn.addEventListener('click', (e) => {
   drawCells(0);
 });
 
-console.log(scene);
-
 const raycaster = new THREE.Raycaster();
 
 const pointer = new THREE.Vector2();
@@ -282,7 +278,11 @@ const onMouseMove = (e) => {
 const makeThunk = (row, col) => {
   return function setCellIfNoMovement(e) {
     if (mouse.moveX < 5 && mouse.moveY < 5) {
+      const exist = scene.children.find(
+        (child) => child.row === row && child.col === col,
+      );
       universe.toggle_cell(row, col);
+      if (exist) scene.remove(exist);
       drawCells(0);
     }
     window.removeEventListener('pointermove', recordMovement);
