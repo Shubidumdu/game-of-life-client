@@ -1,9 +1,9 @@
 import { Universe } from '@shubidumdu/wasm-game-of-life';
 import { memory } from '@shubidumdu/wasm-game-of-life/wasm_game_of_life_bg';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as THREE from 'three';
 import 'normalize.css';
 import './index.css';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const hexStringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
 
