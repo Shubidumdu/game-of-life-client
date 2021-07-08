@@ -1,8 +1,12 @@
 class App extends HTMLElement {
-  activeColor = '#D54B3F';
-  inactiveColor = '#D2CFA6';
-  backgroundColor = '#1D383D';
-  gridColor = '#FDF8F5';
+  INITIAL_ACTIVE_COLOR = '#D54B3F';
+  INITIAL_INACTIVE_COLOR = '#D2CFA6';
+  INITIAL_BACKGROUND_COLOR = '#1D383D';
+  INITIAL_GRID_COLOR = '#FDF8F5';
+
+  $canvas;
+  $colorInputs;
+  $buttonList;
 
   contructor() {
     super();
@@ -13,20 +17,23 @@ class App extends HTMLElement {
       rel="noreferrer noopener"
       ><button id="help-button">?</button></a
     >
-    <canvas id="game-of-life-canvas"></canvas>
-    <div class="color-wrap">
-      <input type="color" id="active-color" />
-      <input type="color" id="inactive-color" />
-      <input type="color" id="background-color" />
-      <input type="color" id="grid-color" />
-    </div>
-    <div id="vertical-button-wrap">
-      <button id="stop-button">START</button>
-      <button id="reset-button">RESET</button>
-      <button id="resize-button">RESIZE</button>
-      <button id="random-button">RANDOM</button>
-    </div>
+    <game-canvas></game-canvas>
+    <color-inputs></color-inputs>
+    <button-list></button-list>
     `;
+    this.$canvas = this.querySelector('game-canvas');
+    this.$colorInputs = this.querySelector('color-inputs');
+    this.$buttonList = this.querySelector('button-list');
+    this.colors = {
+      active: this.INITIAL_ACTIVE_COLOR,
+      inactive: this.INITIAL_INACTIVE_COLOR,
+      background: this.INITIAL_BACKGROUND_COLOR,
+      grid: this.INITIAL_GRID_COLOR,
+    };
+  }
+
+  set colors(colors) {
+    this.$canvas.colors = colors;
   }
 }
 
