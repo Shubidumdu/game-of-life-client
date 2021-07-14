@@ -1,126 +1,14 @@
-import { Universe } from '@shubidumdu/wasm-game-of-life';
 import { memory } from '@shubidumdu/wasm-game-of-life/wasm_game_of_life_bg';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as THREE from 'three';
 import 'normalize.css';
 import './index.css';
 
-const hexStringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
-
 let isStop = true;
-
-const INITIAL_ACTIVE_COLOR = '#D54B3F';
-const INITIAL_INACTIVE_COLOR = '#D2CFA6';
-const INITIAL_BACKGROUND_COLOR = '#1D383D';
-const INITIAL_GRID_COLOR = '#FDF8F5';
-
-let universe = Universe.new();
-let width = universe.width();
-let height = universe.height();
-const activeColor = document.querySelector('#active-color');
-activeColor.value = INITIAL_ACTIVE_COLOR;
-const inactiveColor = document.querySelector('#inactive-color');
-inactiveColor.value = INITIAL_INACTIVE_COLOR;
-const backgroundColor = document.querySelector('#background-color');
-backgroundColor.value = INITIAL_BACKGROUND_COLOR;
-const gridColor = document.querySelector('#grid-color');
-gridColor.value = INITIAL_GRID_COLOR;
-const stopBtn = document.querySelector('#stop-button');
-const resetBtn = document.querySelector('#reset-button');
-const resizeBtn = document.querySelector('#resize-button');
-const randomBtn = document.querySelector('#random-button');
-
-function resizeRendererToDisplaySize(renderer) {
-  const canvas = renderer.domElement;
-  const pixelRatio = window.devicePixelRatio;
-  const width = (canvas.clientWidth * pixelRatio) | 0;
-  const height = (canvas.clientHeight * pixelRatio) | 0;
-  const needResize = canvas.width !== width || canvas.height !== height;
-  if (needResize) {
-    renderer.setSize(width, height, false);
-  }
-  return needResize;
-}
-
-const canvas = document.querySelector('#game-of-life-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas });
-
-const fov = 75;
-const aspect = 2;
-const near = 0.1;
-const far = 1024;
-const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-
-camera.position.setY(48);
-camera.position.setZ(36);
-
-controls.update();
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(hexStringToHex(INITIAL_BACKGROUND_COLOR));
 
 renderer.render(scene, camera);
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const activeMaterial = new THREE.MeshPhysicalMaterial({
-  color: hexStringToHex(INITIAL_ACTIVE_COLOR),
-});
-const inactiveMaterial = new THREE.MeshPhysicalMaterial({
-  color: hexStringToHex(INITIAL_INACTIVE_COLOR),
-});
-const cursorMaterial = new THREE.MeshPhysicalMaterial({
-  color: hexStringToHex(INITIAL_ACTIVE_COLOR),
-  opacity: 0.6,
-  transparent: true,
-});
-
-activeColor.addEventListener('change', (e) => {
-  const hex = hexStringToHex(e.target.value);
-  activeMaterial.color.setHex(hex);
-  cursorMaterial.color.setHex(hex);
-});
-
-inactiveColor.addEventListener('change', (e) => {
-  const hex = hexStringToHex(e.target.value);
-  inactiveMaterial.color.setHex(hex);
-});
-
-backgroundColor.addEventListener('change', (e) => {
-  const hex = hexStringToHex(e.target.value);
-  scene.background = new THREE.Color(hex);
-});
-
-const getIndex = (row, column) => {
-  return row * width + column;
-};
-
-const bitIsSet = (n, arr) => {
-  const byte = Math.floor(n / 8);
-  const mask = 1 << n % 8;
-  return (arr[byte] & mask) === mask;
-};
-
 const GRID_SIZE = 64;
 const GRID_DIVISIONS = 64;
-
-let gridHelper = new THREE.GridHelper(
-  GRID_SIZE,
-  GRID_DIVISIONS,
-  INITIAL_GRID_COLOR,
-  INITIAL_GRID_COLOR,
-);
-
-gridColor.addEventListener('change', (e) => {
-  const hex = hexStringToHex(e.target.value);
-  gridHelper.remove();
-  gridHelper = new THREE.GridHelper(GRID_SIZE, GRID_DIVISIONS, hex, hex);
-  scene.add(gridHelper);
-});
-
-const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-light.position.set(0, 2, 0);
 
 const drawCells = (time) => {
   const cellsPtr = universe.cells();

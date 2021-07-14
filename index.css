@@ -27,19 +27,19 @@ input[type='color'] {
   right: 1rem;
 }
 
-#active-color {
+#active {
   top: 1rem;
 }
 
-#inactive-color {
+#inactive {
   top: 3rem;
 }
 
-#background-color {
+#background {
   top: 5rem;
 }
 
-#grid-color {
+#grid {
   top: 7rem;
 }
 

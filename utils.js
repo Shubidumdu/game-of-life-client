@@ -1,6 +1,16 @@
-export const hexStringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
+export const stringToHex = (str) => parseInt(str.replace(/^#/, ''), 16);
 
-export function resizeRendererToDisplaySize(renderer) {
+export const getIndex = (row, column) => {
+  return row * width + column;
+};
+
+export const bitIsSet = (n, arr) => {
+  const byte = Math.floor(n / 8);
+  const mask = 1 << n % 8;
+  return (arr[byte] & mask) === mask;
+};
+
+export const resizeRendererToDisplaySize = (renderer) => {
   const canvas = renderer.domElement;
   const pixelRatio = window.devicePixelRatio;
   const width = (canvas.clientWidth * pixelRatio) | 0;
@@ -10,4 +20,4 @@ export function resizeRendererToDisplaySize(renderer) {
     renderer.setSize(width, height, false);
   }
   return needResize;
-}
+};
