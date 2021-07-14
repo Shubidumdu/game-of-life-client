@@ -1,10 +1,14 @@
-class App extends HTMLElement {
-  activeColor = '#D54B3F';
-  inactiveColor = '#D2CFA6';
-  backgroundColor = '#1D383D';
-  gridColor = '#FDF8F5';
+import GameCanvas from './GameCanvas.js';
+import ColorPalettes from './ColorPalettes.js';
+import ButtonList from './ButtonList.js';
+import '../index.css';
 
-  contructor() {
+class App extends HTMLElement {
+  GameCanvas;
+  ColorPalettes;
+  ButtonList;
+
+  constructor() {
     super();
     this.innerHTML = `
     <a
@@ -13,20 +17,13 @@ class App extends HTMLElement {
       rel="noreferrer noopener"
       ><button id="help-button">?</button></a
     >
-    <canvas id="game-of-life-canvas"></canvas>
-    <div class="color-wrap">
-      <input type="color" id="active-color" />
-      <input type="color" id="inactive-color" />
-      <input type="color" id="background-color" />
-      <input type="color" id="grid-color" />
-    </div>
-    <div id="vertical-button-wrap">
-      <button id="stop-button">START</button>
-      <button id="reset-button">RESET</button>
-      <button id="resize-button">RESIZE</button>
-      <button id="random-button">RANDOM</button>
-    </div>
+    <game-canvas></game-canvas>
+    <color-palettes></color-palettes>
+    <button-list></button-list>
     `;
+    this.GameCanvas = this.querySelector('game-canvas');
+    this.ColorPalettes = this.querySelector('color-palettes');
+    this.ButtonList = this.querySelector('button-list');
   }
 }
 
