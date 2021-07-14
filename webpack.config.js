@@ -19,10 +19,9 @@ module.exports = {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
-      {
-        test: /\.wasm$/i,
-        use: ['wasm-loader'],
-      },
     ],
+  },
+  experiments: {
+    syncWebAssembly: true,
   },
 };

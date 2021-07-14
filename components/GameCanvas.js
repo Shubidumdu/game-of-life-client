@@ -1,5 +1,10 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { stringToHex } from '../utils';
+import {
+  bitIsSet,
+  getIndex,
+  resizeRendererToDisplaySize,
+  stringToHex,
+} from '../utils';
 import * as THREE from 'three';
 class GameCanvas extends HTMLElement {
   size;
@@ -45,6 +50,7 @@ class GameCanvas extends HTMLElement {
       }),
     };
     this.gridHelper = new THREE.GridHelper(64, 64, colors.grid, colors.grid);
+    this.scene.add(this.light, this.gridHelper);
   }
 
   connectedCallback() {
@@ -72,26 +78,50 @@ class GameCanvas extends HTMLElement {
     }
   };
 
-  drawCells = (time) => {
-    const cellsPtr = universe.cells();
-    const cells = new Uint8Array(memory.buffer, cellsPtr, (width * height) / 8);
-
+  drawCells = (time, cells) => {
     for (let row = 0; row < height; row++) {
       for (let col = 0; col < width; col++) {
         const idx = getIndex(row, col);
         if (!bitIsSet(idx, cells)) continue;
-        const exist = scene.children.find(
+        const exist = this.scene.children.find(
           (child) => child.col === col && child.row === row,
         );
-        if (exist) scene.remove(exist);
+        if (exist) this.scene.remove(exist);
         const cube = new THREE.Mesh(geometry, activeMaterial);
         cube.position.set(row - width / 2 + 0.5, 0.5, col - height / 2 + 0.5);
         cube.startAt = time;
         cube.row = row;
         cube.col = col;
-        scene.add(cube);
+        this.scene.add(cube);
       }
     }
+  };
+
+  waveCells = (time) => {
+    this.scene.children.forEach((child) => {
+      if (child.type === 'Mesh') {
+        if (time - child.startAt < 1) {
+          child.material = this.materials.inactive;
+          child.scale.setY(Math.sin((time - child.startAt) * Math.PI));
+          child.position.setY(Math.sin((time - child.startAt) * Math.PI) / 2);
+        } else {
+          scene.remove(child);
+        }
+      }
+    });
+  };
+
+  resize = () => {
+    if (resizeRendererToDisplaySize(this.renderer)) {
+      const canvas = this.renderer.domElement;
+      this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      this.camera.updateProjectionMatrix();
+    }
+  };
+
+  render = () => {
+    this.controls.update();
+    this.renderer.render(this.scene, this.camera);
   };
 }
 

@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/rustwasm/create-wasm-app#readme",
   "dependencies": {
-    "@shubidumdu/wasm-game-of-life": "^0.1.2",
+    "@shubidumdu/wasm-game-of-life": "^0.1.4",
     "normalize.css": "^8.0.1",
     "three": "^0.129.0"
   },

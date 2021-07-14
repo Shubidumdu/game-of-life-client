@@ -206,10 +206,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.3.tgz#90420f9f9c6d3987f176a19a7d8e764271a2f55d"
   integrity sha512-Fxt+AfXgjMoin2maPIYzFZnQjAXjAL0PHscM5pRTtatFqB+vZxAM9tLp2Optnuw3QOQC40jTNeGYFOMvyf7v9g==
 
-"@shubidumdu/wasm-game-of-life@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@shubidumdu/wasm-game-of-life/-/wasm-game-of-life-0.1.2.tgz#01633291bd840463ee3400eec9e7989a18097f00"
-  integrity sha512-pBWaqgHKkgMvSUxon6gdrFh60u5uFPypRH+APaXF/baHoKjuyO7To6mqQdFz6/OxmX//lDAuzppA2FWI8Z5Vgg==
+"@shubidumdu/wasm-game-of-life@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@shubidumdu/wasm-game-of-life/-/wasm-game-of-life-0.1.4.tgz#f0a9e0de8d9ab0d088586b9dd9df9b62ae32c55c"
+  integrity sha512-kajNhGxAMMbvmKvTDVh875r/3uoLWkv4OJRkx48Utjmpa0RKn+7mkO1J4CDh+X22Ki0Qyrg5ndNV5Z25R0FEMw==
 
 "@types/eslint-scope@^3.7.0":
   version "3.7.1"
